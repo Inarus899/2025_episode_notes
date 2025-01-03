@@ -1,0 +1,30 @@
+# create a directory to hold the code for our website
+cd /var/www
+sudo mkdir todo
+
+# create index.html and put some tasks to be completed
+sudo vim index.html
+
+# create and edit the conf file for our new website
+cd /etc/apache2/site-available
+sudo cp 000-default.conf todo.conf
+sudo vim todo.conf
+
+
+# a2ensite and a2dissite, for apache2 enable/disable site, will just put a
+# link in the folder "site-enabled" to the appropriate conf file in
+# "site-available", or remove the link.
+sudo a2ensite todo.conf
+
+# it should prompt you to reload the apache service, with either service or
+# systemctl. In the video, I ran
+sudo systemctl reload apache2
+
+# cat will print the contents of todo.txt, | will pipe it into the next
+# program, awk then will run the process.awk script, doing the BEGIN block
+# before processing anything piped in, for each line, it will do the center
+# block of code, and after all lines are processed, it will run the END block.
+# tee will both write text piped in to stdout and write to a file provided. The
+# > character will divert any text from stdout to the location provided, and 
+# /dev/null is just a place to just dump things, never to be seen again.
+sudo cat todo.txt | sudo awk -f process.awk | sudo tee index.html > /dev/null
