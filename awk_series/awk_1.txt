@@ -1,0 +1,29 @@
+# show test data
+cat data.txt
+
+# The default behavior is that each line is a record and each "column" is a 
+# field. A lot of examples show clean looking text files, but that isn't
+# necessary.
+# NOTE: there are two spaces before the *.
+sed -i 's/  */ /g' data.txt
+
+# records are split by the variable RS. The default value of RS is a 
+# new line ("\n")
+
+# fields are split by the variable FS, though there are other options we will
+# cover in future videos. The default value of FS is one or more spaces ("\s")
+
+# The main use of awk, it seems, is to print content from a file. We can print
+# each line (so the whole file) with:
+cat data.txt | awk '{ print }'
+# or
+awk '{ print }' data.txt
+
+# We can also print specific columns using $<field_number>
+awk '{ print $3 }' data.txt
+
+# multiple columns can be print. Use commas to put the value of OFS in between
+# the fields. OFS defaults to a space. Compare:
+awk '{ print $2 $4 }' data.txt
+
+awk '{ print $2, $4 }' data.txt
