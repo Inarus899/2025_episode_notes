@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <title> To Do List </title>
+    <style>
+      body {
+        background-color: black;
+	color: lightgray;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>To Do List</h1>
+    <div id="todo-form">
+      <input type="text" id="todo-input" placeholder="Some task">
+      <button id="add-btn">Add</button>
+    </div>
+    <ul id="todo-list">
+      <!-- Tasks will show up here -->
+    </ul>
+  <script>
+    const todoInput = document.getElementById("todo-input");
+    const addBtn = document.getElementById("add-btn");
+    const todoList = document.getElementById("todo-list");
+   
+    // get the file
+    async function fetchTasks() {
+      const response = await fetch("tasks.php");
+      const tasks = await response.json();
+      tasks.forEach(addTaskToList);
+    }
+
+    // save the tasks to file
+    async function saveTasks() {
+      const tasks = Array.from(todoList.children).map(
+        (li) => li.querySelector("span").textContent
+      );
+
+      await fetch("tasks.php", {
+        method: "POST",
+        body: JSON.stringify(tasks),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
+
+    function addTask() {
+      const taskText = todoInput.value.trim();
+      if (taskText === "") {
+        alert("You need to enter a task");
+	return;
+      }
+
+      addTaskToList(taskText);
+      saveTasks();
+
+      // clear form 
+      todoInput.value = "";
+    }
+
+    function addTaskToList(taskText) {      
+      // Create the list item
+      const listItem = document.createElement("li");
+      listItem.className = "todo-item";
+
+      const taskSpan = document.createElement("span");
+      taskSpan.textContent = taskText;
+
+      // The Remove Button
+      const removeBtn = document.createElement("button");
+      removeBtn.className = "remove-btn";
+      removeBtn.textContent = "Remove";
+      removeBtn.onclick = () => {
+        todoList.removeChild(listItem);
+        saveTasks();
+      };
+
+      listItem.appendChild(taskSpan);
+      listItem.appendChild(removeBtn);
+
+      // append to the list
+      todoList.appendChild(listItem);
+    }
+
+    addBtn.addEventListener("click", addTask);
+
+    todoInput.addEventListener("keypress", (event) => {
+      if (event.key === "Enter") {
+        addTask();
+      }
+    });
+
+  fetchTasks();
+  </script>
+  </body>
+</html>
