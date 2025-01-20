@@ -1,0 +1,26 @@
+# rather large install
+sudo apt install npm
+
+# create a directory and make the app
+mkdir react
+cd react
+
+# create the framework for an app
+npm create vite@latest
+
+# the previous step tells us what to do, so we will do that
+cd todo
+npm install
+npm run dev
+
+# note the npm run dev does not make the site available to other users on the
+# network. It does have this little hint that says "use --host to expose", but
+# that doesn't work as you might expect
+npm run dev --host
+
+# instead, we need to fix the command with one more thing
+npm run dev -- --host
+
+# we looked at todo/index.html, but did not make any changes. You can see that
+# it calls src/main.jsx. We also didn't edit that file, but we made or edited
+# every other file in that directory
