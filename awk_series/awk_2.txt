@@ -1,0 +1,38 @@
+# Last episode covered printing specific columns, but let's look at how to
+# format that output a bit more. We saw the difference a comma can make, but we
+# can customize that a bit more. A quick refresher
+awk '{ print $2 $4}' data.txt
+awk '{ print $2, $4}' data.txt
+
+# We can adjust this output with two variables. ORS stands for output record
+# separator, and remember record is normally each line in the file. OFS is for
+# output field separator, and each field is normally thought of as a column in a
+# row.
+awk -v ORS="\n\n" '{ print $2, $4}' data.txt
+awk -v OFS="|:|" '{ print $2, $4}' data.txt
+
+# We can also avoid printing every row. 
+awk '$4 == "45" { print $2, $4 }' data.txt
+awk '$4 ~ 91 { print $2, $4 }' data.txt
+
+# note that you don't have to print and search the same rows.
+awk '$4 ~ 91 { print $2 }' data.txt
+
+# You can also negate these matching patterns
+awk '$4 != "45" { print $2, $4 }' data.txt
+awk '$4 !~ 91 { print $2, $4 }' data.txt
+
+# you can even search with multiple patterns
+awk '$4 ~ 91 { print $2, $4 }; $4 ~ 98 { print $2, $4 }' data.txt
+
+# and you can use uniq to remove duplicates
+awk '$4 ~ 91 { print $2, $4 }; $4 ~ 98 { print $2, $4 }' data.txt | uniq
+
+# we can also work with the length of each record
+awk '{ print length($0) }' data.txt
+
+# don't forget other programs exist and can be helpful
+awk '{ print length($0) }' data.txt | sort
+
+# we can print based on length as well
+awk 'length($0) > 70 { print $0 }' data.txt
