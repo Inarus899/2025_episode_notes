@@ -1,0 +1,23 @@
+# Make sure to check which version of awk you are using. I wrote this based on
+# documentation for gawk, which is the default awk on my Ubuntu system, but my
+# Linux Mint distro uses mawk.
+awk --version
+
+# If you have gawk version 5.3 or later, then you can use --csv
+
+# Nothing will print because the fields are expected to be separated by spaces
+awk '{ print $7 }' test.txt
+
+# we can see that there are only 5 fields right now
+awk '{ print NF }' test.txt
+
+# but we can change the field separator with variables
+awk -v FS="," '{ print NF }' test.txt
+
+# but we expect there to be 7. Awk isn't handling the quotes as we would hope.
+# Let's fix that by defining what is a Field, instead of what isn't a field.
+# we can start by replicating what we are already doing.
+awk -v FPAT="[^,]+" '{ print NF }' test.txt
+
+# now we can add in something to handle the quotes
+awk -v FPAT="([^,]+)|(\"[^\"]+\")" '{ print NF }' test.txt
