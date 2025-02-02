@@ -1,0 +1,145 @@
+# you might have to install some of the following. The Django version in the
+# repository for me was 4.2.11 but Django has a 5.1 release at the time of
+# writing this file.
+sudo apt install python3 python3-pip python3-venv sqlite3
+
+# For some distros, python does not mean python v3, when it should. A simple
+# alias can help, something you can set in your .bashrc.
+alias python='python3'
+
+# create your directory and cd into it
+mkdir django
+cd django
+
+# let's set up the virtual environment. 
+python -m venv my_env
+source my_env/bin/activate
+
+# note, you can escape this virtual environment with a simple command.
+deactivate
+
+# source is an extremely common tool for bash, so you can do the same with:
+. my_env/bin/activate
+
+# we can better improve getting into the virtual environment by creating a
+# symbolic link
+ln -s my_env/bin/activate activate
+
+# now we can just run
+. activate
+
+# and we can install django for this local directory/project with
+pip install django
+
+# set up the virtual environment. This makes it easier to use pip to manage
+# python packages. Also, pip is a way of getting python packages. Feel free to
+# check the versions for python, pip, and django. At the time of recording, I am
+# using versions
+
+# 24.0
+pip --version
+
+# 3.12.3
+python --version
+
+# 5.1.5
+django-admin --version
+
+# 3.45.1
+sqlite3 --version
+
+django-admin startproject mysite ./
+
+# this is how you can run the server on a local machine
+python manage.py runserver
+
+# but I have set a goal that all the projects on this channel will be hosted on
+# one machine and accessed on another. So we have another hurdle. First, we can
+# ask for some help
+python manage.py runserver --help
+
+# we can see that we can provide an addrport (a port number or ip address and
+# port number). So let's try that. I did see documentation saying 0.0.0.0 should
+# work, but I got it to work with this. First, I know my ip address because I
+# have my router set up to always give each machine the same ip address on my
+# network, but you can find your local network address with a number of
+# commands. My favorite is:
+ip addr
+
+# so we can adjust our command to use that ip address and I'll go ahead and
+# specify the same port number
+python manage.py runserver 192.168.0.132:8000
+
+# We can see error messages on the browser, but it is from django instead of my
+# browser. So that is a good step in the right direction. We can get more from
+# the bash output. One hint is the reference to mysite.settings, which is
+# talking about a file at mysite/settings.py. Also, ALLOWED_HOSTS reads like a
+# variable, and we can search for it.
+vim mysite/settings.py
+
+# when we add our host ip address to the list of strings, then we can access the
+# site.
+
+# now we can add apps.
+python manage.py startapp polls
+
+# we can edit the polls views.py and urls.py to make something happen. See the
+# files included in this repository.
+vim polls/views.py
+vim polls/urls.py
+
+# The errors we are seeing when we run the server is from the INSTALLED_APPS
+# listed in the settings file. We can get rid of the red text with the helpful
+# message provided.
+python manage.py migrate
+
+# do note, that these apps aren't always necessary, and if going for full
+# optimization on all things, including size, you might want to delete them. I
+# won't, because it's easier to just ignore them. While we are in the settings
+# file, let's look at our database variable. We can have multiple databases
+# defined here, one for production and another for development, whatever. 
+
+# next, we will update the polls/models.py file to add some models. This is how
+# django handles objects. Again, you can see the file in the repository.
+vim polls/models.py
+
+# We need to update our settings to register the polls app into our project. We
+# also need to make it aware that we want to get the models into the database.
+python manage.py makemigrations polls
+
+# we can see the logic that is created by looking at the migration file that is
+# created. As the number indicates, updating models is something you can do with
+# Django, and it will preserve the history of these changes.
+vim polls/migrations/0001_initial.py
+
+# we can even see the exact commands that will be given to the database
+python manage.py sqlmigrate polls 0001
+
+# but to actually update the database, we run the same migrate command as before
+python manage.py migrate
+
+# we can get into a shell specifically for our project
+python manage.py shell
+
+# some commands that are ran in the shell
+from polls.models import Choice, Question
+Question.objects.all()
+from django.utils import timezone
+q = Question(question_text="What's new?", pub_date=timezone.now())
+type(q)
+q.save()
+q.id
+q.question_text
+q.question_text = "Something better than What's up"
+q.save()
+Question.objects.all()
+type(Question.objects.all())
+
+# Now, let's look at the database to see what we have done. Remember, with
+# migrate, we inserted some tables and with the shell, we inserted some rows.
+python manage.py dbshell
+
+# some sqlite3 commands
+.tables
+.schema polls_question
+SELECT * FROM polls_question;
