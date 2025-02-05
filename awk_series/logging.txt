@@ -1,0 +1,5 @@
+ERROR: This is an error message
+ERROR: This is another error message
+WARNING: This is not an error message
+DEBUG: Someone forgot to turn off debugging
+ERROR: Debugging affects user experience

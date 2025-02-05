@@ -1,0 +1,48 @@
+# we will be using the logging.txt file.
+cat logging.txt
+
+# When working with awk, it is easy to get a lot done without thinking of
+# exactly what is happening. Remember that each line of the code will run on
+# each record, and the default behavior is that each record is separated with a
+# new line. You can change the Record Separator variable (RS) as we did in a
+# previous video, but we will use the default new line separator.
+
+
+# We have looked at the length function before, but here we can see how we can
+# find the longest length of an individual line.
+awk '{ if (length($0) > max) max = length($0) }' logging.txt
+
+# this doesn't actually print anything because we didn't tell it to print.
+awk '{ if (length($0) > max) max = length($0); print(max) }' logging.txt
+
+# So, two things. We don't have to initialize variables like most programming
+# languages. Using a variable will set the value to 0, which makes sense for a
+# language that should primarily be used in short bursts. Also, we know from
+# previous videos we don't need to be so verbose with our conditional statement.
+awk 'length($0) > max { max = length($0); print(max) }' logging.txt
+
+# we can see a possible problem with our code getting too long, so in the video,
+# I will use \ to let bash know I'm not done providing a command. This is done
+# purely for readability.
+awk 'length($0) > max { max = length($0);\
+print(max) }' logging.txt
+
+# we don't need to print the current value of max, we just want to know
+# what it is when the file is done being processed. So we can introduce BEGIN
+# and END blocks to the code.
+awk 'length($0) > max { max = length($0) }\
+END { print(max) }' logging.txt
+
+# In awk, there are three main bodies of code. The BEGIN block runs all its code
+# once, before any records are processed. The main body then runs on each
+# record, so if there is 50 records, it will run 50 times. Then the END block
+# runs only once, after everything is done. So in our case, each line is
+# determined if it is a longer list than the current max (which starts at 0),
+# and once every line has been measured, the final max value is printed.
+
+# One more example.
+awk 'BEGIN { FS=":"; print("Error,Warning,Debug") }\
+$1 == "ERROR"   { error = error + 1 }\
+$1 == "WARNING" { warning = warning + 1 }\
+$1 == "DEBUG"   { debug = debug + 1 }\
+END { print(error","warning","debug) }' logging.txt
