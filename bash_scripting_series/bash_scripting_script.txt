@@ -1,0 +1,34 @@
+# show wiki page for ANSI codes
+
+# use echo to make things appear on screen
+echo "Hello"
+
+# if we just try to use the escape code, it doesn't work
+echo "\033[33mHello"
+
+# we need to use the -e flag for echo
+echo -e "\033[33mHello"
+
+# we can stack flags into our output stream, so let's create a brighter yellow
+echo -e "\033[1;33mHello"
+
+# we can have multiple colors from the same output
+echo -e "\033[33mHello \033[34mWorld"
+
+# and we can make the second color bright
+echo -e "\033[33mHello \033[1;34mWorld"
+
+# but if we try to make the first one bright..
+echo -e "\033[1;33mHello \033[34mWorld"
+
+# So, when we go to define the colors, we want to be aware if we want the bright
+# flag on or off.
+echo -e "\033[1;33mHello \033[0;34mWorld"
+
+# there are other font modifiers, but be aware that they all don't work on all
+# machines. What works on my machine is underline and invert colors
+echo -e "\033[4;33mHello \033[7;34mWorld \033[0m"
+
+# on another machine, I got other codes to work, so try it out for your self.
+# https://en.wikipedia.org/wiki/ANSI_escape_code
+echo -e "\033[2;33mHello \033[9;34mWorld\033[0m"
