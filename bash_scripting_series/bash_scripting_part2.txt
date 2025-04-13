@@ -1,0 +1,37 @@
+# Creating (or stealing) a fake prompt. We can look at .bashrc for inspiration.
+vim .bashrc
+
+# but we can build our own, either based on an existing libary or just hard
+# coded. These variables were defined in the previous video, but if you don't
+# have that code, you don't need them.
+echo -e "${BR_GREEN}TheExhaustedProgrammer${NC}:${YELLOW}some_directory $ "
+echo -e "\033[1;32mAlexander\033[0m:\033[1;33manother_directory $ "
+
+# pv. Taking a look at man pv might not make things clear, but let's see this
+# through.
+man pv
+
+# it doesn't help to just use it, but let's start there.
+echo -e "\033[33mHello World" | pv
+
+# we can get rid of that additional output with a -q flag
+echo -e "\033[33mHello World" | pv -q
+
+# But we want to make it look like we are typing, at least a little bit.
+echo -e "\033[33mHello World" | pv -qL 10
+
+# last thing I think you will need to get your own fake prompt and typing going,
+# controlling the location and behavior of the cursor.
+# A is up, B down, C right, D back
+# don't forget that echo puts out a new line after it is done, so adjust or add
+# in the -n flag
+echo -e "\033[10A"
+
+echo -e "\033[33mHello World\033[5DAudience" | pv -qL 10
+
+# we can also hide or show the cursor.
+# To hide
+echo -e "\033[?25l"
+
+# to show
+echo -e "\033[?25h"
