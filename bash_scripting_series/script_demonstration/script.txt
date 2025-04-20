@@ -1,0 +1,35 @@
+# We created a library for bash_colors, and we discussed how we can control the
+# cursor on the screen. Now we need to put things together. First, let's create
+# a function for later.
+
+cat bash_scripting.sh
+
+# with this, we can use it in hand made scripting.
+source bash_scripting.sh
+
+script_text="echo Hello"
+
+next_input
+
+head -n 12 youtube_script_setup.sh
+
+head -n 21 youtube_script_setup.sh | tail -n 8
+
+head -n 25 youtube_script_setup.sh | tail -n 3
+
+head -n 28 youtube_script_setup.sh | tail -n 2
+
+cat fake_next_input.sh
+
+head -n 32 youtube_script_setup.sh | tail -n 3
+
+head -n 35 youtube_script_setup.sh | tail -n 2
+
+head -n 40 youtube_script_setup.sh | tail -n 4
+
+head -n 44 youtube_script_setup.sh | tail -n 3
+
+head -n 50 youtube_script_setup.sh | tail -n 5
+
+head -n 53 youtube_script_setup.sh | tail -n 2
+
